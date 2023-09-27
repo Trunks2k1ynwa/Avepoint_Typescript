@@ -1,54 +1,49 @@
-function simpleUseState<T>(val: T): [() => T, (v: T) => void] {
+function useState<T>(val: T): [() => T, (v: T) => void] {
   return [
     () => val,
     (v: T) => {
-      val = v;
-    },
-  ];
+      val = v // Gán giá trị mới cho biến stateValue
+    }
+  ]
 }
-const [strGetter, strSetter] = simpleUseState('evondev');
-// console.log(strGetter()); // evondev
-strSetter('Developer');
-// console.log(strGetter()); // Developer
-// const [strGetter2, strSetter2] = simpleUseState(100);
-// console.log(strGetter2()); // 100
-// strSetter2(200);
-// console.log(strGetter2()); // 200
-// const [strGetter3, strSetter3] = simpleUseState(true);
+
+const [state, setState] = useState('evondev')
+const [state1, setState2] = useState(23)
+
+setState('Developer')
+console.log(state()) // Kết quả sẽ là 'Developer'
+
+//////////////////////////////
 interface Rank<RankItem> {
-  item: RankItem;
-  rank: number;
+  item: RankItem
+  rank: number
 }
-function ranker<RankItem>(
-  items: RankItem[],
-  rankCallBack: (v: RankItem) => number
-): RankItem[] {
-  const ranks: Rank<RankItem>[] = items.map(item => ({
+function ranker<RankItem>(items: RankItem[], rankCallBack: (v: RankItem) => number): Rank<RankItem>[] {
+  const ranks: Rank<RankItem>[] = items.map((item) => ({
     item,
-    rank: rankCallBack(item),
-  }));
-  ranks.sort((a, b) => a.rank - b.rank);
-  return ranks.map(rank => rank.item);
+    rank: rankCallBack(item)
+  }))
+  ranks.sort((a, b) => a.rank - b.rank)
+  return ranks.map((rank) => rank)
 }
 const languages: {
-  name: string;
-  dificutly: number;
+  name: string
+  dificutly: number
 }[] = [
   {
     name: 'ReactJS',
-    dificutly: 60,
+    dificutly: 60
   },
   {
     name: 'Angular',
-    dificutly: 80,
+    dificutly: 80
   },
   {
     name: 'Vue',
-    dificutly: 70,
-  },
-];
-const r = ranker([1, 2, 3, 4, 5], number => number * 5);
-console.log(r);
-const rank = ranker(languages, ({ dificutly }) => dificutly);
-console.log('rank', rank);
-// [1,2,3,4,5] (v) => v * 5
+    dificutly: 70
+  }
+]
+const r = ranker([5, 4, 1, 3, 2], (number) => number * 5)
+console.log(r)
+const rank = ranker(languages, ({ dificutly }) => dificutly)
+console.log('rank', rank)
